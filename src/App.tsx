@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from "reactstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import logo from './logo.svg';
 import './App.css';
 
 import Header from './components/Header';
@@ -37,9 +36,7 @@ const App = () => {
   }
 
   function toggleTodo(index: number) {
-    console.log(index);
     items[index].done = !items[index].done;
-    console.log(items[index].text)
     setItems([...items]);
   }
 
