@@ -1,12 +1,19 @@
-import React from 'react'
+import React from 'react';
 import logo from './logo.svg';
-import Header from './components/Header'
-import Item from './components/Item'
 import './App.css';
 
-class App extends React.Component {
+import Header from './components/Header';
+import Item from './components/Item';
 
-  constructor(props){
+
+interface IAppState {
+  newItemValue: string,
+  items: {text: string, done: boolean}[]
+}
+
+class App extends React.Component<{}, IAppState> {
+
+  constructor(props: any){
     super(props)
     this.state = {
       newItemValue: '',
@@ -16,19 +23,19 @@ class App extends React.Component {
       ]
     }
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.toggleTodo = this.toggleTodo.bind(this)
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggleTodo = this.toggleTodo.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(event: any) {
     this.setState({newItemValue: event.target.value})
   }
 
-  handleSubmit(event) {
+  handleSubmit(event: any) {
     event.preventDefault();
 
-    let items = this.state.items.slice()
+    let items = this.state.items.slice();
 
     items.push({
       text: this.state.newItemValue,
@@ -41,7 +48,7 @@ class App extends React.Component {
     })
   }
 
-  toggleTodo(index) {
+  toggleTodo(index: any) {
     let items = this.state.items.slice()
     let item = items[index]
     item.done = !item.done

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Item = (props) => {
+const Item = (props: any) => {
     return (
         <li>
             <label>
