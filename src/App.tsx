@@ -7,11 +7,11 @@ import './App.css';
 import Header from './components/Header';
 import Item from './components/Item';
 
-const App = () => {
+const App = (): JSX.Element => {
 
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
-  interface IItems {text: string, done:Boolean}
+  interface IItems {text: string, done:boolean}
 
   const [newItemValue, setNewItemValue] = useState('');
   const [items, setItems] = useState<IItems[]>([]);
@@ -22,11 +22,11 @@ const App = () => {
       {text:"Second todo", done:true}]);
   },[]);
 
-  function handleChange(event: any) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setNewItemValue(event.target.value);
   }
 
-  function handleSubmit(event: any) {
+  function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
     setItems([...items, {
       text: newItemValue,
