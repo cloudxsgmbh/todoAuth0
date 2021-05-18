@@ -1,79 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row } from "reactstrap";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import logo from './logo.svg';
 import './App.css';
 
 import Header from './components/Header';
 import Item from './components/Item';
 
+const App = () => {
 
-interface IAppState {
-  newItemValue: string,
-  items: {text: string, done: boolean}[]
-}
+  const { user, isAuthenticated } = useAuth0();
 
-class App extends React.Component<{}, IAppState> {
+  interface IItems {text: string, done:Boolean}
 
-  constructor(props: any){
-    super(props)
-    this.state = {
-      newItemValue: '',
-      items: [
-        {text:"First todo", done:false},
-        {text:"Second todo", done:true}
-      ]
-    }
+  const [newItemValue, setNewItemValue] = useState('');
+  const [items, setItems] = useState<IItems[]>([]);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.toggleTodo = this.toggleTodo.bind(this);
+  useEffect(() => {
+    setItems([
+      {text:"First todo", done:false},
+      {text:"Second todo", done:true}]);
+  },[]);
+
+  function handleChange(event: any) {
+    setNewItemValue(event.target.value);
   }
 
-  handleChange(event: any) {
-    this.setState({newItemValue: event.target.value})
-  }
-
-  handleSubmit(event: any) {
+  function handleSubmit(event: any) {
     event.preventDefault();
-
-    let items = this.state.items.slice();
-
-    items.push({
-      text: this.state.newItemValue,
-      done:false
-    })
-
-    this.setState({
-      newItemValue: '',
-      items: items
-    })
+    setItems([...items, {
+      text: newItemValue,
+      done: false
+    }]);
+    setNewItemValue('');
   }
 
-  toggleTodo(index: any) {
-    let items = this.state.items.slice()
-    let item = items[index]
-    item.done = !item.done
-
-    this.setState({items: items})
+  function toggleTodo(index: number) {
+    console.log(index);
+    items[index].done = !items[index].done;
+    console.log(items[index].text)
+    setItems([...items]);
   }
 
-  render(){
-    return (
-      <div className="App">
+  return (
+  
+      <div id="app" className="d-flex flex-column h-100">
         <Header />
+        {isAuthenticated && (
+          <Container>
+            <Row>
+              <Col>
+                <form onSubmit={handleSubmit}>
+                  <input type="text" placeholder="New todo..." value={newItemValue} onChange={handleChange} />
+                  <input type="submit" value="Add Item" />
+                </form>
 
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="New todo..." value={this.state.newItemValue} onChange={this.handleChange} />
-          <input type="submit" value="Add Item" />
-        </form>
-
-        <ol>
-          {this.state.items.map((item,index) => (
-            <Item key={index} clickHandler={()=> this.toggleTodo(index)} text={item.text} done={item.done} />
-          ))}
-        </ol>
+                <ol>
+                  {items.map((item, index) => (
+                    <Item key={index} clickHandler={()=> toggleTodo(index)} text={item.text} done={item.done} />
+                  ))}
+                </ol>
+              </Col>
+            </Row>
+          </Container>
+        )}
       </div>
-    );
-    }
+  );
 }
 
 export default App;
